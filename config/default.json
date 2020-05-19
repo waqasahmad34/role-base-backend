@@ -1,0 +1,7 @@
+{
+    "mongoURI": "mongodb+srv://waqas:waqas@cluster0-eg5yx.mongodb.net/test",
+    "jwtSecret": "i-am-the-secret-key-of-role-project",
+    "githubClientId": "Iv1.bff2a801768360a1",
+    "githubSecret": "e0bd175789d23f4a103ce55285f23dafd529ecc9"
+  }
+  
