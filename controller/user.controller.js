@@ -245,7 +245,7 @@ router.post('/createPermission', auth, async (req, res, next) => {
 
 //updateReadPermision
 
-router.post('readPermission', auth, async (req, res, next) => {
+router.post('/readPermission', auth, async (req, res, next) => {
 	const { userId, r } = req.body;
 	try {
 		const user = await User.findOne({ $and: [ { _id: userId }, { member: req.user.id } ] });
