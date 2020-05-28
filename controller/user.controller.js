@@ -284,7 +284,7 @@ router.post('/deletePermission', auth, async (req, res, next) => {
 
 // sendRegistrationLinkEmail = ;
 
-router.post('/', auth, async (req, res) => {
+router.post('/sendRegistrationLinkEmail', auth, async (req, res) => {
 	// extract data from body
 	const { email, c, u, r, d } = req.body;
 	try {
