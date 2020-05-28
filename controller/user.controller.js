@@ -6,6 +6,7 @@ const config = require('config');
 const User = require('../models/user');
 const auth = require('../middleware/auth');
 const secret = config.get('jwtSecret');
+const sendRegistrationEmail = require('../utils/email');
 
 //testRoute
 
@@ -280,4 +281,53 @@ router.post('/deletePermission', auth, async (req, res, next) => {
 		return res.status(500).send('Server error');
 	}
 });
+
+// sendRegistrationLinkEmail = ;
+
+router.post('/', auth, async (req, res) => {
+	// extract data from body
+	const { email, c, u, r, d } = req.body;
+	try {
+		// check is user exist with email
+		const user = await User.findOne({ email: email });
+		if (user) {
+			return res.status(400).json({ msg: 'User Already Exist' });
+		}
+
+		user = new User({
+			email: email,
+			member: req.user.id,
+			isChild: true,
+			c: c,
+			r: r,
+			u: u,
+			d: d
+		});
+
+		await user.save();
+
+		// Return jsonwebtoken
+
+		const payload = {
+			user: {
+				id: user.id,
+				email: user.email,
+				role: user.role,
+				create: user.c,
+				read: user.r,
+				update: user.u,
+				delete: user.d
+			}
+		};
+		const token = jwt.sign(payload, secret, { expiresIn: '1h' });
+
+		// create reset password link and sent as an email
+		const link = `https://role-base-frontend.herokuapp.com/registration/${user._id}/${token}`;
+		await sendRegistrationEmail(email, link);
+		return res.status(200).json({ msg: 'Email Sent!' });
+	} catch (err) {
+		return res.status(500).send('Server error');
+	}
+});
+
 module.exports = router;
