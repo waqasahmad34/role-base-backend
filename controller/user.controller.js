@@ -6,7 +6,7 @@ const config = require('config');
 const User = require('../models/user');
 const auth = require('../middleware/auth');
 const secret = config.get('jwtSecret');
-const sendRegistrationEmail = require('../utils/email');
+const {sendRegistrationEmail} = require('../utils/email');
 
 //testRoute
 
@@ -289,7 +289,7 @@ router.post('/sendRegistrationLinkEmail', auth, async (req, res) => {
 	const { email, c, u, r, d } = req.body;
 	try {
 		// check is user exist with email
-		const user = await User.findOne({ email: email });
+		let user = await User.findOne({ email: email });
 		if (user) {
 			return res.status(400).json({ msg: 'User Already Exist' });
 		}
@@ -326,6 +326,7 @@ router.post('/sendRegistrationLinkEmail', auth, async (req, res) => {
 		await sendRegistrationEmail(email, link);
 		return res.status(200).json({ msg: 'Email Sent!' });
 	} catch (err) {
+		console.log('err: ',err);
 		return res.status(500).send('Server error');
 	}
 });
