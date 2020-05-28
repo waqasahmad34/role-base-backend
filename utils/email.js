@@ -4,7 +4,9 @@ const nodemailer = require('nodemailer');
 module.exports.sendRegistrationEmail = function(email, link){
 	// create reusable transporter object using the default SMTP transport
 	let transporter = nodemailer.createTransport({
-		service: 'Gmail',
+		host: 'smtp.gmail.com',
+		port: 465,
+		secure: true,
 		auth: {
 			user: 'myguardiansixtesting@gmail.com', // generated ethereal user
 			pass: 'myguardiansix6' // generated ethereal password
