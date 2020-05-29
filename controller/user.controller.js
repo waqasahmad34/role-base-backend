@@ -6,7 +6,7 @@ const config = require('config');
 const User = require('../models/user');
 const auth = require('../middleware/auth');
 const secret = config.get('jwtSecret');
-const {sendRegistrationEmail} = require('../utils/email');
+const { sendRegistrationEmail } = require('../utils/email');
 
 //testRoute
 
@@ -326,8 +326,40 @@ router.post('/sendRegistrationLinkEmail', auth, async (req, res) => {
 		await sendRegistrationEmail(email, link);
 		return res.status(200).json({ msg: 'Email Sent!' });
 	} catch (err) {
-		console.log('err: ',err);
+		console.log('err: ', err);
 		return res.status(500).send('Server error');
+	}
+});
+
+// registerLink
+
+router.post('/registerLink', async (req, res) => {
+	// extract data from body
+	const { userId, token, name, phoneNumber, password } = req.body;
+	try {
+		// check user exist with id
+		const user = await User.findOne({ _id: userId });
+		if (!user) {
+			return res.status(404).json({ msg: 'User Not Found!' });
+		}
+		// decode jwt token to verify its expiry
+		const decode = jwt.verify(token, secret);
+		if (!decode) {
+			return res.status(400).json({ msg: 'Link Expired!' });
+		}
+		// encrypt user password and save to database
+		const salt = await bcrypt.genSalt(10);
+		user.name = name;
+		user.phoneNumber = phoneNumber;
+		user.password = await bcrypt.hash(password, salt);
+		await user.save();
+
+		return res.status(200).json({ msg: 'Account Registered Successfully!' });
+	} catch (err) {
+		// check expiry
+		if (err.message === 'jwt expired') {
+			return res.status(400).json({ msg: 'Link Expired!' });
+		}
 	}
 });
 
