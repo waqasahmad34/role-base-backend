@@ -16,7 +16,7 @@ module.exports.sendRegistrationEmail = function(email, link) {
 		},
 		tls: {
 			// do not fail on invalid certs
-			rejectUnauthorized: false
+			rejectUnauthorized: true
 		}
 	});
 
