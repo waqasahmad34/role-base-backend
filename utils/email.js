@@ -4,16 +4,19 @@ const config = require('config');
 const apiKey = config.get('SENDGRID_API_KEY');
 sgMail.setApiKey(apiKey);
 
-module.exports.sendRegistrationEmail = function(email, link){
+module.exports.sendRegistrationEmail = function(email, link) {
 	// create reusable transporter object using the default SMTP transport
 	let transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',
 		port: 465,
-		secure: false,
-		service: 'Gmail',
+		secure: true,
 		auth: {
 			user: 'myguardiansixtesting@gmail.com', // generated ethereal user
 			pass: 'myguardiansix6' // generated ethereal password
+		},
+		tls: {
+			// do not fail on invalid certs
+			rejectUnauthorized: false
 		}
 	});
 
@@ -24,7 +27,7 @@ module.exports.sendRegistrationEmail = function(email, link){
 		subject: 'Registration Link', // Subject line
 		//text: 'Hello world?', // plain text body
 		html: `Hi!<br> Here is Your Registration Link, Please Click: <strong><a href='${link}'>Here</a></strong> Which is only valid for 1 hour`
-     // html body
+		// html body
 	};
 
 	// send mail with defined transport object
