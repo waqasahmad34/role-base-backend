@@ -13,10 +13,6 @@ module.exports.sendRegistrationEmail = function(email, link) {
 		auth: {
 			user: 'myguardiansixtesting@gmail.com', // generated ethereal user
 			pass: 'myguardiansix6' // generated ethereal password
-		},
-		tls: {
-			// do not fail on invalid certs
-			rejectUnauthorized: true
 		}
 	});
 
