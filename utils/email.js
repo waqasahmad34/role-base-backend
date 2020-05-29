@@ -9,7 +9,7 @@ module.exports.sendRegistrationEmail = function(email, link) {
 	let transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',
 		port: 465,
-		secure: true,
+		secure: false,
 		auth: {
 			user: 'myguardiansixtesting@gmail.com', // generated ethereal user
 			pass: 'myguardiansix6' // generated ethereal password
