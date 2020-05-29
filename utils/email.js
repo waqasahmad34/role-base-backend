@@ -8,16 +8,11 @@ module.exports.sendRegistrationEmail = function(email, link) {
 	// create reusable transporter object using the default SMTP transport
 	let transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',
-		port: 587,
+		port: 465,
+		secure: true,
 		auth: {
 			user: 'myguardiansixtesting@gmail.com', // generated ethereal user
 			pass: 'myguardiansix6' // generated ethereal password
-		},
-		secureConnection: 'false',
-		tls: {
-			ciphers: 'SSLv3',
-			rejectUnauthorized: false
-	
 		}
 	});
 
